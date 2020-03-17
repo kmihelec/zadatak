@@ -1,0 +1,17 @@
+
+.App{
+    display: flex;
+    flex-direction: column;
+    max-width:1500px;
+    margin: 0 auto;
+
+}
+
+.track{
+    font-size:1.3em;
+    display:flex;
+    padding: 1em;
+    margin: 1em 1em 0 1em;
+    border:1px solid black;
+    justify-content: space-between;
+}
