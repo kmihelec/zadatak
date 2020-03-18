@@ -1,5 +1,6 @@
 import React from 'react';
 import style from './App.module.css';
+import SongInfo from "./components/songInfo";
 
 class App extends React.Component {
     constructor(props) {
@@ -8,7 +9,8 @@ class App extends React.Component {
             loading:false,
             error:null,
             tracks:[],
-            modal:false
+            activeId:null,
+            sortBy: 'default'
         }
     }
 
@@ -17,13 +19,13 @@ class App extends React.Component {
         this.fetchData()
     }
 
-     fetchData=async ()=>{
+     fetchData= async () =>{
          let topList;
          let tracks =[];
          try{
              const data = await fetch('https://cors-anywhere.herokuapp.com/https://api.deezer.com/chart');
              topList = await data.json();
-             tracks = topList.tracks.data.map(track=>track)
+             tracks = topList.tracks.data.map(track=>track);
              this.setState(state=>({loading:false, tracks:state.tracks.concat(tracks)}))
          }catch (e) {
              this.setState({loading:false,error:'Unable to fetch tracks!'})
@@ -32,20 +34,51 @@ class App extends React.Component {
          }
     };
 
+    showInfo= (id) =>{
+        this.setState({activeId:id})
+    };
 
+    closeInfo= () =>{
+        this.setState({activeId:null});
+    };
+    handleSelect= (event) =>{
+        let sorting = [].concat(...this.state.tracks)
+        if(event.target.value==='durationAsc') sorting.sort((a,b)=>a.duration-b.duration);
+        else if(event.target.value==='durationDsc') sorting.sort((a,b)=>b.duration-a.duration);
+        else sorting.sort((a,b)=>a.position-b.position);
+        this.setState({sortBy:event.target.value, tracks:sorting})
+    }
 
   render() {
       if(this.state.loading) return <h2>Loading...</h2>;
       if(this.state.error)return <h2>{this.state.error}</h2>;
       return (
           <div className={style.App} >
+              <header className={style.header}>
+                  <h1>Top Pop</h1>
+                <div className={style.sort}>
+                    <label htmlFor='sort' >Sort top list by: </label>
+                    <select name='sort' onChange={this.handleSelect} value={this.state.sortBy}>
+                      <option value='default'>Default</option>
+                      <option value='durationAsc'>Shortest</option>
+                      <option value='durationDsc'>Longest</option>
+                    </select>
+                </div>
+              </header>
+              <ul className={style.list}>
               {this.state.tracks.map(track=>{
-                  return(<div key={track.id} className={style.track}>
-                        <div>{track.title}</div>
-                        <div>{track.duration}s</div>
-                  </div>)
+                  return(<li key={track.id} >
+                      <div className={style.track} onClick={()=>this.showInfo(track.id)}>
+                          <div className={style.ranking}>{track.position}</div>
+                          <div className={style.name}>{track.title}</div>
+                      </div>
+                      {track.id===this.state.activeId?
+                          <SongInfo modal={this.state.activeId} closeInfo={this.closeInfo} artist={track.artist.name} duration={track.duration} position={track.position} title={track.title}/>:null}
+                  </li>)
               })}
+              </ul>
           </div>
+
       );
   }
 
