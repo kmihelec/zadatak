@@ -50,8 +50,8 @@ class App extends React.Component {
     }
 
   render() {
-      if(this.state.loading) return <h2>Loading...</h2>;
-      if(this.state.error)return <h2>{this.state.error}</h2>;
+      if(this.state.loading) return <h2 className={style.loading}>Loading...</h2>;
+      if(this.state.error)return <div className={style.error}><h2>Error!</h2><p>{this.state.error}</p></div>;
       return (
           <div className={style.App} >
               <header className={style.header}>

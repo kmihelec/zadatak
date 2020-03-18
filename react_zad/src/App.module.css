@@ -6,7 +6,7 @@
     background-color: #F2F2F2;
     flex-direction: column;
 }
-header{
+.header{
     display: flex;
     font-family: Arial, serif;
     background-color: #DCDFF4;
@@ -14,7 +14,7 @@ header{
     padding: 1em;
     margin-bottom: 0.4em;
 }
-header h1{
+.header h1{
 
     font-size: 3em;
     font-family: Arial, serif;
@@ -52,13 +52,29 @@ header h1{
     font-family: Arial, serif;
 
 }
-
-
 .list{
     margin:0;
     padding:0;
     list-style-type: none;
 }
 
+.loading{
+    font-size: 2em;
+    margin:10% auto;
+    text-align: center;
+}
+.error{
+    background-color: #dc3333;
+    color: #16395B;
+    width: 40%;
+    border: 2px solid darkred;
+    border-radius: 2em;
+    padding: 2em;
+    font-size: 2em;
+    margin:10% auto;
+
+
+    text-align: center;
+}
 
 
